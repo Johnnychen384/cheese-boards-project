@@ -12,15 +12,21 @@ describe("User, Board, and Cheese models", () => {
 
 
     // Tests to check if tables are created and can insert data
-    test("create User", async () => {
+    test("Can create User", async () => {
         const testUser = await User.create({name: "Johnny", email: "Johnny@123.com"})
 
         expect(testUser.name).toBe("Johnny")
     })
 
-    test("create Board", async () => {
+    test("Can create Board", async () => {
         const testBoard = await Board.create({type: "wood", description: "A wooden board", rating: 3})
 
         expect(testBoard.rating).toBe(3)
+    })
+
+    test("Can create Cheese", async () => {
+        const testCheese = await Cheese.create({title: "Cheese", description: "A block of yellow dairy"})
+
+        expect(testCheese.title).toBe("Cheese")
     })
 })
