@@ -110,4 +110,25 @@ describe("User, Board, and Cheese models", () => {
         
     })
 
+
+    test("A user can be loaded with its boards", async () => {
+        const testUser = await User.create({name: "Johnny", email: "Johnny@123.com"})
+
+        const testBoard1 = await Board.create({type: "wood1", description: "A wooden board", rating: 1})
+        const testBoard2 = await Board.create({type: "wood2", description: "A wooden board", rating: 5})
+        const testBoard3 = await Board.create({type: "wood3", description: "A wooden board", rating: 3})
+
+        await testUser.addBoards(testBoard1)
+        await testUser.addBoards(testBoard2)
+        await testUser.addBoards(testBoard3)
+
+        const someUser = await User.findAll({
+            include: [
+                {model: Board}
+            ]
+        })
+
+        expect(someUser[0].Boards.length).toBe(3)
+    })
+
 })
