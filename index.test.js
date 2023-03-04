@@ -29,4 +29,23 @@ describe("User, Board, and Cheese models", () => {
 
         expect(testCheese.title).toBe("Cheese")
     })
+
+
+
+    // Multiple Boards can be added to a User
+    test("Can add 2 boards to 1 user", async () => {
+        const testUser = await User.create({name: "Johnny", email: "Johnny@123.com"})
+
+        const testBoard1 = await Board.create({type: "wood", description: "A wooden board", rating: 5})
+        const testBoard2 = await Board.create({type: "wood", description: "A wooden board", rating: 3})
+
+        await testUser.addBoards(testBoard1)
+        await testUser.addBoards(testBoard2)
+
+        const findUsers = await testUser.getBoards()
+
+        expect(findUsers.length).toBe(2)
+
+    })
+
 })
