@@ -11,7 +11,7 @@ describe("User, Board, and Cheese models", () => {
     });
 
 
-    // Tests to check if tables are created and can insert data
+    // Tests to check if tables are created and can insert data ===================
     test("Can create User", async () => {
         const testUser = await User.create({name: "Johnny", email: "Johnny@123.com"})
 
@@ -32,7 +32,7 @@ describe("User, Board, and Cheese models", () => {
 
 
 
-    // Multiple Boards can be added to a User
+    // Multiple Boards can be added to a User ================================
     test("Can add 2 boards to 1 user", async () => {
         const testUser = await User.create({name: "Johnny", email: "Johnny@123.com"})
 
@@ -51,7 +51,7 @@ describe("User, Board, and Cheese models", () => {
 
 
 
-    // Many to Many relationship Tests (Cheese to Board)
+    // Many to Many relationship Tests (Cheese to Board) ====================
     test("Can a board have mulitple cheeses", async () => {
         const testBoard = await Board.create({type: "wood", description: "A wooden board", rating: 5})
 
@@ -86,6 +86,28 @@ describe("User, Board, and Cheese models", () => {
         expect(findBoards.some(board => board.type === "wood2")).toBe(true)
         expect(findBoards.some(board => board.type === "wood3")).toBe(true)
 
+    })
+
+
+
+    // Eager Loading Tests ==============
+    test("A board can be loaded with its cheeses", async () => {
+        const testBoard = await Board.create({type: "wood", description: "A wooden board", rating: 1})
+
+        const testCheese1 = await Cheese.create({title: "American Cheese", description: "A block of yellow dairy"})
+        const testCheese2 = await Cheese.create({title: "Swiss Cheese", description: "A block of yellow dairy"})
+
+        await testBoard.addCheeses(testCheese1)
+        await testBoard.addCheeses(testCheese2)
+
+        const someBoard = await Board.findAll({
+            include: [
+                {model: Cheese}
+            ]
+        })
+
+        expect(someBoard[0].dataValues.Cheeses.length).toBe(2)
+        
     })
 
 })
