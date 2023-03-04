@@ -48,4 +48,22 @@ describe("User, Board, and Cheese models", () => {
 
     })
 
+
+
+
+    // Many to Many relationship Tests (Cheese to Board)
+    test("Can a board have mulitple cheeses", async () => {
+        const testBoard = await Board.create({type: "wood", description: "A wooden board", rating: 5})
+
+        const testCheese1 = await Cheese.create({title: "American Cheese", description: "A block of yellow dairy"})
+        const testCheese2 = await Cheese.create({title: "Swiss Cheese", description: "A block of yellow dairy"})
+
+        await testBoard.addCheeses(testCheese1)
+        await testBoard.addCheeses(testCheese2)
+
+        const findCheese = await testBoard.getCheeses()
+
+        expect(findCheese.length).toBe(2)
+    })
+
 })
