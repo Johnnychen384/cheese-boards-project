@@ -64,6 +64,28 @@ describe("User, Board, and Cheese models", () => {
         const findCheese = await testBoard.getCheeses()
 
         expect(findCheese.length).toBe(2)
+        expect(findCheese.some(cheese => cheese.title === "American Cheese")).toBe(true)
+
+    })
+
+    test("Can multiple boards have a cheese", async () => {
+        const testBoard1 = await Board.create({type: "wood1", description: "A wooden board", rating: 1})
+        const testBoard2 = await Board.create({type: "wood2", description: "A wooden board", rating: 5})
+        const testBoard3 = await Board.create({type: "wood3", description: "A wooden board", rating: 3})
+
+        const testCheese = await Cheese.create({title: "American Cheese", description: "A block of yellow dairy"})
+
+        await testCheese.addBoards(testBoard1)
+        await testCheese.addBoards(testBoard2)
+        await testCheese.addBoards(testBoard3)
+
+        const findBoards = await testCheese.getBoards()
+
+        expect(findBoards.length).toBe(3)
+        expect(findBoards.some(board => board.type === "wood1")).toBe(true)
+        expect(findBoards.some(board => board.type === "wood2")).toBe(true)
+        expect(findBoards.some(board => board.type === "wood3")).toBe(true)
+
     })
 
 })
